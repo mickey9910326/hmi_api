@@ -5,6 +5,9 @@
 *.obj
 *.elf
 
+# Binary file
+*.hex
+
 # Linker output
 *.ilk
 *.map

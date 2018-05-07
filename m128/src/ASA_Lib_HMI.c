@@ -9,7 +9,6 @@
 #include <util\delay.h>
 #include <string.h>
 #include <inttypes.h>
-#include "bit_op.h"
 
 // baud 38400 -> 1 bit trismit use 1/38400=2.604e-5 sec
 // baud 38400 -> 1 byte trismit use 8/38400=2.08e-4 sec
