@@ -25,10 +25,4 @@
 /**M128**/
 char ASA_M128_set(void);
 
-char M128_HMI_set(char LSBytes, char Mask, char shift, char Data);
-char M128_HMI_put(char Bytes, char Type, void *Data_p);
-char M128_HMI_get(char Bytes, void *Data_p);
-char M128_HMI_Form_put(char *FormatString, char Bytes, void *Data_p);
-char M128_HMI_Form_get(char *FormatString, char Bytes, void *Data_p);;
-
 #endif
