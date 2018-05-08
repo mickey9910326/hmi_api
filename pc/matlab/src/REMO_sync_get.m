@@ -1,5 +1,7 @@
-function [data,error] = REMO_sync_get(Port,Type,Bytes)
+function [data,error] = REMO_sync_get(port)
 
-    fprintf(Port, 'sync');
-    res = fscanf(Port,'%s');
-    [data, error] = REMO_get(Port,Type,Bytes);
+fprintf(port, 'sync');
+res = REMO_getline(port);
+[data, error] = REMO_get(port);
+
+end

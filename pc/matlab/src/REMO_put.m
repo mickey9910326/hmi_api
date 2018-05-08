@@ -1,108 +1,73 @@
-function [error] = REMO_put(Port,Type,Bytes,data)
-
+function [error] = REMO_put(port,data)
 error = 0;
-% if (Bytes > 32)
-%     error = 1;
-%     warning('資料過多bytes>32');
-%     return;
-% end
 
-persistent BatchesBytes ;
-persistent ResumingMode ;
+typeStr = class(data)
+fprintf('123')
 
-if (isempty(ResumingMode)) %It does not already exist
-    ResumingMode = 0;
-end
-
-char PackBytes;
-if (Bytes <= 32 && ResumingMode == 0)
-    PackBytes = Bytes;
-elseif( Bytes > 32 && ResumingMode == 0)
-    BatchesBytes = Bytes;
-    PackBytes = 32;
-    ResumingMode = 1;
-    BatchesBytes = BatchesBytes -PackBytes;
-elseif( Bytes == 0 && ResumingMode == 1 )
-    PackBytes = 32;
-    ResumingMode = 1;
-    BatchesBytes = BatchesBytes -PackBytes;
-    if (BatchesBytes > 32)
-        ResumingMode = 1;
-    else
-        ResumingMode = 2;
-    end
-elseif ( Bytes > 0 && ResumingMode == 2)
-    PackBytes = Bytes;
-    ResumingMode = 0;
+if (strcmp(typeStr, 'int8'))
+    type = 0;
+    typeSize = 1;
+    Cdata = typecast(int8(data),'uint8');
+elseif (strcmp(typeStr, 'int16'))
+    type = 1;
+    typeSize = 2;
+    Cdata = typecast(int16(data),'uint8');
+elseif (strcmp(typeStr, 'int32'))
+    type = 2;
+    typeSize = 4;
+    Cdata = typecast(int32(data),'uint8');
+elseif (strcmp(typeStr, 'int64'))
+    type = 3;
+    typeSize = 8;
+    Cdata = typecast(int64(data),'uint8');
+elseif (strcmp(typeStr, 'uint8'))
+    type = 4;
+    typeSize = 1;
+    Cdata = typecast(uint8(data),'uint8');
+elseif (strcmp(typeStr, 'uint16'))
+    type = 5;
+    typeSize = 2;
+    Cdata = typecast(uint16(data),'uint8');
+elseif (strcmp(typeStr, 'uint32'))
+    type = 6;
+    typeSize = 4;
+    Cdata = typecast(uint32(data),'uint8');
+elseif (strcmp(typeStr, 'uint64'))
+    type = 7;
+    typeSize = 8;
+    Cdata = typecast(uint64(data),'uint8');
+elseif (strcmp(typeStr, 'single'))
+    type = 8;
+    typeSize = 4;
+    Cdata = typecast(single(data),'uint8');
+elseif (strcmp(typeStr, 'double'))
+    type = 9;
+    typeSize = 8;
+    Cdata = typecast(double(data),'uint8');
 else
-    warning('error type');
+    warning('不支援的資料格式');
     return;
 end
 
-error = 0;
+type
+bytes = length(Cdata)
+fprintf('123')
 
-switch Type
-    case 0  % int8
-        type = 'int8';
-        TypeSize = 1;
-        Cdata = typecast(int8(data),'uint8');
-    case 1  % int16
-        type = 'int16';
-        TypeSize = 2;
-        Cdata = typecast(int16(data),'uint8');
-    case 2  % int32
-        type = 'int32';
-        TypeSize = 4;
-        Cdata = typecast(int32(data),'uint8');
-    case 3  % int64
-        type = 'int64';
-        TypeSize = 4;
-        Cdata = typecast(int64(data),'uint8');
-    case 4  % uint8
-        type = 'uint8';
-        TypeSize = 1;
-        Cdata = typecast(uint8(data),'uint8');
-    case 5  % uint16
-        type = 'uint16';
-        TypeSize = 2;
-        Cdata = typecast(uint16(data),'uint8');
-    case 6  % uint32
-        type = 'uint32';
-        TypeSize = 4;
-        Cdata = typecast(uint32(data),'uint8');
-    case 7  % uint64
-        type = 'uint64';
-        TypeSize = 4;
-        Cdata = typecast(uint64(data),'uint8');
-    case 8  % float32
-        type = 'single';
-        TypeSize = 4;
-        Cdata = typecast(single(data),'uint8');
-    case 9  % float64
-        type = 'double';
-        TypeSize = 8;
-        Cdata = typecast(double(data),'uint8');
-    otherwise
-        warning('error type');
-        return
-end
-
-fwrite(Port,hex2dec('AB'),'uint8');
-fwrite(Port,hex2dec('AB'),'uint8');
-fwrite(Port,hex2dec('AB'),'uint8');
-fwrite(Port,Type,'uint8');
-fwrite(Port,PackBytes,'uint8');
+fwrite(port,hex2dec('AB'),'uint8');
+fwrite(port,hex2dec('AB'),'uint8');
+fwrite(port,hex2dec('AB'),'uint8');
+fwrite(port,type,'uint8');
+fwrite(port,bytes,'uint8');
 
 % get binary data in uint8 form ASA_PC
-CheckSum = Bytes;
-for i = 1:Bytes
-    fwrite(Port,Cdata(i),'uint8');
-    CheckSum = CheckSum + Cdata(i);
+checkSum = bytes;
+for i = 1:bytes
+    fwrite(port,Cdata(i),'uint8');
+    checkSum = checkSum + Cdata(i);
 end
 
 % get check value form ASA_PC
-CheckSum = rem(CheckSum,256);
-fwrite(Port,CheckSum,'uint8');
-
+checkSum = rem(checkSum, 256);
+fwrite(port, checkSum, 'uint8');
 
 end
