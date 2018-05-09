@@ -1,7 +1,9 @@
-function [error] = REMO_FORM_put(Port,FormatString,Bytes,data)
+function [error, FormatString, Bytes] = remo_form_put(Port,data)
 
 error = 0;
 CheckSum = 0;
+
+[FormatString, Bytes] = getFormatOfStruct(data)
 
 fwrite(Port,hex2dec('AB'),'uint8');
 fwrite(Port,hex2dec('AB'),'uint8');
@@ -10,14 +12,14 @@ fwrite(Port,hex2dec('AB'),'uint8');
 FormatBytes = length(FormatString);
 TotalBytes = 1+FormatBytes+Bytes;
 if ( TotalBytes >255 )
-    warning('¸ê®Æµ²ºc¦r¦êªø«×¹Lªø');
+    warning('ï¿½`bytesï¿½Æ¶Wï¿½L255ï¿½Aï¿½Ð´ï¿½Ö¸ï¿½Æ¤jï¿½p');
     return;
 end
 fwrite(Port,TotalBytes,'uint8');
 fwrite(Port,FormatBytes,'uint8');
 
 %  FormatString
-[Format,TypeNum,StructSize,error] = FormatGet(FormatString);
+[Format,TypeNum,StructSize,error] = decodeFormatStr(FormatString);
 CheckSum = CheckSum + TotalBytes;
 CheckSum = FormatBytes;
 

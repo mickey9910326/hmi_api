@@ -28,7 +28,7 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Libraries
-LIBS = -lm -lprintf_flt -lscanf_flt
+# LIBS = -lm -lprintf_flt -lscanf_flt
 
 ## Objects that must be built in order to link
 # LIBSRC = $(wildcard revlib/*.c)
