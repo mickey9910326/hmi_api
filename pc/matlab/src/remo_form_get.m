@@ -8,7 +8,7 @@ for i = 1:3
     check = fread(Port,1,'uint8');
     if check ~= hex2dec('BB');
         error = 2;
-        warning('ï¿½Ê¥]ï¿½Yï¿½ï¿½ï¿½~');
+        warning('«Ê¥]ÀY¿ù»~');
         return
     end
 end
@@ -57,7 +57,7 @@ data = cell2struct(celldata,{Format.Name},1);
 
 if CheckSum ~= GetCheckSum
     error = 4;
-    warning('CheckSumï¿½ï¿½ï¿½~ï¿½Aï¿½Ð­ï¿½ï¿½sï¿½Ç¿ï¿½');
+    warning('CheckSum¿ù»~¡A½Ð­«·s¶Ç¿é');
     return;
 end
 

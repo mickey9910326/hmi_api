@@ -12,7 +12,7 @@ fwrite(Port,hex2dec('AB'),'uint8');
 FormatBytes = length(FormatString);
 TotalBytes = 1+FormatBytes+Bytes;
 if ( TotalBytes >255 )
-    warning('ï¿½`bytesï¿½Æ¶Wï¿½L255ï¿½Aï¿½Ð´ï¿½Ö¸ï¿½Æ¤jï¿½p');
+    warning('Á`bytes¼Æ¶W¹L255¡A½ÐÁY¤pdata¤j¤p');
     return;
 end
 fwrite(Port,TotalBytes,'uint8');
