@@ -8,7 +8,7 @@ for i = 1:3
     check = fread(Port,1,'uint8');
     if check ~= hex2dec('BB');
         error = 2;
-        warning('«Ê¥]ÀY¿ù»~');
+        warning('ï¿½Ê¥]ï¿½Yï¿½ï¿½ï¿½~');
         return
     end
 end
@@ -31,7 +31,7 @@ for i = 1:GetFormatBytes
     CheckSum = CheckSum + FormatString(i);
 end
 FormatString = char(FormatString);
-[Format,TypeNum,StructSize,error] = FormatGet(FormatString);
+[Format,TypeNum,StructSize,error] = decodeFormatStr(FormatString);
 
 % get binary data in uint8 form ASA_PC
 for i = 1:Bytes
@@ -57,7 +57,7 @@ data = cell2struct(celldata,{Format.Name},1);
 
 if CheckSum ~= GetCheckSum
     error = 4;
-    warning('CheckSum¿ù»~¡A½Ð­«·s¶Ç¿é');
+    warning('CheckSumï¿½ï¿½ï¿½~ï¿½Aï¿½Ð­ï¿½ï¿½sï¿½Ç¿ï¿½');
     return;
 end
 

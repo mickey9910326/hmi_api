@@ -12,14 +12,14 @@ fwrite(Port,hex2dec('AB'),'uint8');
 FormatBytes = length(FormatString);
 TotalBytes = 1+FormatBytes+Bytes;
 if ( TotalBytes >255 )
-    warning('總bytes數超過255，請減少資料大小');
+    warning('嚙窯bytes嚙複超嚙盤255嚙璀嚙請湛蕭硌嚙複大嚙緘');
     return;
 end
 fwrite(Port,TotalBytes,'uint8');
 fwrite(Port,FormatBytes,'uint8');
 
 %  FormatString
-[Format,TypeNum,StructSize,error] = FormatGet(FormatString);
+[Format,TypeNum,StructSize,error] = decodeFormatStr(FormatString);
 CheckSum = CheckSum + TotalBytes;
 CheckSum = FormatBytes;
 

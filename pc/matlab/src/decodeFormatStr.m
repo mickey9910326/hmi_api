@@ -1,4 +1,4 @@
-function [Format,TypeNum,StructSize,error] = FormatGet(FormatString)
+function [Format,TypeNum,StructSize,error] = decodeFormatStr(FormatString)
 % handle FormatString
 error = 0;
 StructSize = 0;
