@@ -1,4 +1,4 @@
-function [data,FormatString,error] = REMO_FORM_get(Port,Bytes)
+function [data,FormatString,error] = REMO_FORM_get(Port)
 
 error = 0;
 CheckSum = 0;
@@ -23,6 +23,7 @@ CheckSum = CheckSum + GetFormatBytes;
 
 % get data bytes
 GetBytes = GetTotalBytes-GetFormatBytes;
+Bytes = GetBytes-1;
 
 % get FormatBytes
 for i = 1:GetFormatBytes
@@ -53,12 +54,6 @@ for n = 1 : Bytes/StructSize
     end
 end
 data = cell2struct(celldata,{Format.Name},1);
-
-if GetBytes~=Bytes+1
-    error = 3;
-    warning('Bytes¿ù»~');
-    return;
-end
 
 if CheckSum ~= GetCheckSum
     error = 4;

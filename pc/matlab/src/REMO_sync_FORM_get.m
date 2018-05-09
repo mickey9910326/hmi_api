@@ -1,7 +1,7 @@
-function [data,FormatString,error] = REMO_sync_FORM_get(Port,Bytes)
+function [data,FormatString,error] = REMO_sync_FORM_get(port)
 
-fprintf(Port, 'sync');
+fprintf(port, 'sync');
 res = REMO_getline(port);
-[data,FormatString,error] = REMO_FORM_get(Port,Bytes);
+[data,FormatString,error] = REMO_FORM_get(port);
 
 end

@@ -1,8 +1,7 @@
 function [error] = REMO_put(port,data)
-error = 0;
 
-typeStr = class(data)
-fprintf('123')
+error = 0;
+typeStr = class(data);
 
 if (strcmp(typeStr, 'int8'))
     type = 0;
@@ -49,9 +48,7 @@ else
     return;
 end
 
-type
-bytes = length(Cdata)
-fprintf('123')
+bytes = length(Cdata);
 
 fwrite(port,hex2dec('AB'),'uint8');
 fwrite(port,hex2dec('AB'),'uint8');
