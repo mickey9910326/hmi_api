@@ -1,4 +1,4 @@
-function [ Port ] = REMO_open( COM_number )
+function [ Port ] = remo_open( COM_number )
 
 delete(instrfindall);
 

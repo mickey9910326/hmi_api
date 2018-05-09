@@ -1,4 +1,4 @@
-function [data,error] = REMO_get(port)
+function [data,error] = remo_get(port)
 
 error = 0;
 

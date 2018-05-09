@@ -1,4 +1,4 @@
-function [data,FormatString,error] = REMO_FORM_get(Port)
+function [data,FormatString,error] = remo_form_get(Port)
 
 error = 0;
 CheckSum = 0;
@@ -57,7 +57,7 @@ data = cell2struct(celldata,{Format.Name},1);
 
 if CheckSum ~= GetCheckSum
     error = 4;
-    warning('CheckSum錯誤');
+    warning('CheckSum錯誤，請重新傳輸');
     return;
 end
 

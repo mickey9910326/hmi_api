@@ -26,17 +26,19 @@ int main() {
     };
     char bytes = sizeof(st_t);
 
-    printf("M128 Start -------------!\n");
-    printf("Plz say something to M128\n");
+    printf("put struct\n");
     scanf("%s", s);
-
     M128_HMI_Form_put("ui8x10,i32x10,f32x5", bytes, &data);
 
+    printf("get struct\n");
+    scanf("%s", s);
     M128_HMI_Form_get("ui8x10,i32x10,f32x5", bytes, &data);
     data.ui8[0] += 1;
     data.i32[0] += 1;
     data.f32[0] += 1.0;
 
+    printf("get struct\n");
+    scanf("%s", s);
     M128_HMI_Form_put("ui8x10,i32x10,f32x5", bytes, &data);
 
     return 0;

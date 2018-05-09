@@ -1,4 +1,4 @@
-function [s] = REMO_getline(port)
+function [s] = remo_getline(port)
 
 s = '';
 isPrevSpace = 0;

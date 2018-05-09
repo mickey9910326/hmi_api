@@ -1,4 +1,4 @@
-function [error] = REMO_put(port,data)
+function [error] = remo_put(port,data)
 
 error = 0;
 typeStr = class(data);

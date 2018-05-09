@@ -1,4 +1,4 @@
-function [error, FormatString, Bytes] = REMO_FORM_put(Port,data)
+function [error, FormatString, Bytes] = remo_form_put(Port,data)
 
 error = 0;
 CheckSum = 0;
@@ -12,7 +12,7 @@ fwrite(Port,hex2dec('AB'),'uint8');
 FormatBytes = length(FormatString);
 TotalBytes = 1+FormatBytes+Bytes;
 if ( TotalBytes >255 )
-    warning('資料結構字串長度過長');
+    warning('總bytes數超過255，請減少資料大小');
     return;
 end
 fwrite(Port,TotalBytes,'uint8');
