@@ -1,7 +1,7 @@
-function [error] = REMO_sync_FORM_put(Port,FormatString,Bytes,data)
+function [error, FormatString, Bytes] = REMO_sync_FORM_put(Port,data)
 
 fprintf(Port, 'sync');
 res = REMO_getline(port);
-[error] = REMO_FORM_put(Port,FormatString,Bytes,data);
+[error, FormatString, Bytes] = REMO_FORM_put(Port,FormatString,Bytes,data);
 
 end

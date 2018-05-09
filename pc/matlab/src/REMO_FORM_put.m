@@ -1,7 +1,9 @@
-function [error] = REMO_FORM_put(Port,FormatString,Bytes,data)
+function [error, FormatString, Bytes] = REMO_FORM_put(Port,data)
 
 error = 0;
 CheckSum = 0;
+
+[FormatString, Bytes] = getFormatOfStruct(data)
 
 fwrite(Port,hex2dec('AB'),'uint8');
 fwrite(Port,hex2dec('AB'),'uint8');
