@@ -92,27 +92,15 @@ char HMI_timeout_set(int count)
 
 char M128_HMI_put(char Bytes, char Type, void *Data_p)
 {
-	static char BatchesBytes ;
-	static char ResumingMode = 0;
-	char PackBytes;
-	char res = 0;
-	// res = update_status(Bytes,&ResumingMode,&PackBytes,&BatchesBytes);
-	// if (res) {
-	// 	ResumingMode = 0;
-	// 	return res;
-	// }
-
-	uint8_t i = 0;
     uint8_t CheckSum = Bytes;
-    PackBytes = Bytes;
 
 	uart_put( 0xAA );
 	uart_put( 0xAA );
 	uart_put( 0xAA );
 	uart_put( Type );
-	uart_put( PackBytes );
+	uart_put( Bytes );
 
-	for(i=0; i<PackBytes; i++)
+	for(uint8_t i=0; i<Bytes; i++)
 	{
 		uart_put( ((char*)Data_p)[i] );
 		CheckSum += ((char*)Data_p)[i];
@@ -125,17 +113,19 @@ char M128_HMI_put(char Bytes, char Type, void *Data_p)
 char M128_HMI_get(char Bytes, void *Data_p)
 {
 	uint8_t PackBytes = Bytes;
-	uint8_t i, GetBytes, CheckSum, GetCheckSum, GetType;
+	uint8_t i;
+    uint8_t GetBytes;
+    uint8_t CheckSum;
+    uint8_t GetCheckSum;
+    uint8_t GetType;
 
-	// if( Bytes > 32 )
-	// 	return 1;
+	if( uart_get() != 0xAB )
+		return 2;
+	if( uart_get() != 0xAB )
+		return 2;
+	if( uart_get() != 0xAB )
+		return 2;
 
-	if( uart_get() != 0xAB )
-		return 2;
-	if( uart_get() != 0xAB )
-		return 2;
-	if( uart_get() != 0xAB )
-		return 2;
 	GetType  = uart_get();
 	GetBytes = uart_get();
 	CheckSum = GetBytes;
@@ -157,7 +147,9 @@ char M128_HMI_get(char Bytes, void *Data_p)
 
 char M128_HMI_Form_put(char *FormatString, char Bytes, void *Data_p)
 {
-	unsigned char i, FormatBytes = 0, CheckSum = 0;
+	uint8_t i;
+    uint8_t FormatBytes = 0;
+    uint8_t CheckSum = 0;
 
 	uart_put( 0xBB );
 	uart_put( 0xBB );
@@ -192,7 +184,13 @@ char M128_HMI_Form_put(char *FormatString, char Bytes, void *Data_p)
 
 char M128_HMI_Form_get(char *FormatString, char Bytes, void *Data_p)
 {
-	unsigned char i, FormatBytes = 0, GetTotalBytes, GetFormatBytes, GetBytes, CheckSum, GetCheckSum;
+	uint8_t i;
+    uint8_t FormatBytes = 0;
+    uint8_t GetTotalBytes;
+    uint8_t GetFormatBytes;
+    uint8_t GetBytes;
+    uint8_t CheckSum;
+    uint8_t GetCheckSum;
 
 	if( (1+(int)FormatBytes+(int)Bytes)>255 )	// 資料結構字串長度過長
 		return 1;
@@ -233,45 +231,3 @@ char M128_HMI_Form_get(char *FormatString, char Bytes, void *Data_p)
 
 	return 0;
 }
-
-
-/** NOTE
- * No ResumingMode now, the function still has problem.
- */
-
-// char update_status(char Bytes, char* pResumingMode, char* pPackBytes, char* pBatchesBytes) {
-// 	// 一批封包，組成一個完整的資料
-// 	// a batch of packet build a complete data
-// 	// 封包bytes上限為32
-// 	// packet max Byte is 32
-// 	// 一批資料bytes上限為255
-// 	// pResumingMode
-// 	// 續傳模式
-// 	//  0 - 未開啟
-// 	//  1 - 第一包資料
-// 	//  2 - 中間資料，每包需32bytes
-// 	//  3 - 最後一包資料
-// 	if (Bytes <= 32 && *pResumingMode == 0) { // no ResumingMode
-// 		*pPackBytes = Bytes;
-// 	} else if( Bytes > 32 && *pResumingMode == 0) { // first packages
-// 		*pBatchesBytes = Bytes;
-// 		*pPackBytes = 32;
-// 		*pResumingMode = 1;
-// 		*pBatchesBytes -= *pPackBytes;
-// 	} else if( Bytes == 0 && *pResumingMode == 1 ) { // medium packages
-// 		*pPackBytes = 32;
-// 		*pResumingMode = 1;
-// 		*pBatchesBytes -= *pPackBytes;
-// 		if (*pBatchesBytes > 32) {
-// 			*pResumingMode = 1;
-// 		} else {
-// 			*pResumingMode = 2;
-// 		}
-// 	} else if ( Bytes > 0 && *pResumingMode == 2) { // last package
-// 		*pPackBytes = Bytes;
-// 		*pResumingMode = 0;
-// 	} else {
-// 		return 1;
-// 	}
-// 	return 0;
-// }
