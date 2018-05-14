@@ -52,8 +52,10 @@ switch Type
 end
 
 % get data bytes form ASA_PC
-Bytes = fread(port, 1,'uint8');
-CheckSum = Bytes;
+BytesH = fread(port, 1,'uint8');
+BytesL = fread(port, 1,'uint8');
+Bytes  = BytesH*256 + BytesL;
+CheckSum = BytesH + BytesL;
 
 % get binary data in uint8 form ASA_PC
 for i = 1:Bytes

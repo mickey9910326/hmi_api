@@ -54,10 +54,13 @@ fwrite(port,hex2dec('AB'),'uint8');
 fwrite(port,hex2dec('AB'),'uint8');
 fwrite(port,hex2dec('AB'),'uint8');
 fwrite(port,type,'uint8');
-fwrite(port,bytes,'uint8');
+bytesH = rem(bytes,256);
+bytesL = floor(bytes/256);
+fwrite(port,bytesH,'uint8');
+fwrite(port,bytesL,'uint8');
 
 % get binary data in uint8 form ASA_PC
-checkSum = bytes;
+checkSum = bytesH + bytesL;
 for i = 1:bytes
     fwrite(port,Cdata(i),'uint8');
     checkSum = checkSum + Cdata(i);
