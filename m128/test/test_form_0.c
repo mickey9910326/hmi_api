@@ -1,7 +1,7 @@
 /**
  * @file test_form_0.c
  * @author mickey9910326
- * @date 2018.5.8
+ * @date 2018.05.08
  * @brief
  */
 
@@ -24,7 +24,7 @@ int main() {
         {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024},
         {1.0, 2.5, 4.0, 5.5, 6.0}
     };
-    char bytes = sizeof(st_t);
+    int bytes = sizeof(st_t);
 
     printf("put struct\n");
     scanf("%s", s);

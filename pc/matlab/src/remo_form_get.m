@@ -14,8 +14,10 @@ for i = 1:3
 end
 
 % get TotalBytes
-GetTotalBytes = fread(Port,1,'uint8');
-CheckSum = GetTotalBytes;
+GetTotalBytesH = fread(Port,1,'uint8');
+GetTotalBytesL = fread(Port,1,'uint8');
+GetTotalBytes = GetTotalBytesH*256 + GetTotalBytesL;
+CheckSum = GetTotalBytesH + GetTotalBytesL;
 
 % get FormatBytes
 GetFormatBytes = fread(Port,1,'uint8');

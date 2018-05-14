@@ -11,11 +11,11 @@ fwrite(Port,hex2dec('AB'),'uint8');
 
 FormatBytes = length(FormatString);
 TotalBytes = 1+FormatBytes+Bytes;
-if ( TotalBytes >255 )
-    warning('總bytes數超過255，請縮小data大小');
-    return;
-end
-fwrite(Port,TotalBytes,'uint8');
+
+TotalBytesH = rem(TotalBytes,256);
+TotalBytesL = floor(TotalBytes/256);
+fwrite(Port,TotalBytesH,'uint8');
+fwrite(Port,TotalBytesL,'uint8');
 fwrite(Port,FormatBytes,'uint8');
 
 %  FormatString

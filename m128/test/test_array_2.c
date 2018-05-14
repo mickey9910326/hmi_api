@@ -1,8 +1,8 @@
 /**
- * @file test_array_0.c
+ * @file test_array_2.c
  * @author mickey9910326
- * @date 2018.05.07
- * @brief M128 send 5 f32 data.
+ * @date 2018.05.14
+ * @brief M128 send 100 f32 data.
  */
 
 #include "../lib/ASA_Lib.h"
@@ -12,15 +12,19 @@
 int main() {
     ASA_M128_set();
 
-    float data[5] = {1.1, -1, 0,1, -2.1};
+    float data[100];
     char s[20];
-    char num = 5;
+    char num = 100;
 
-    int bytes = num*sizeof(float); // float is 4 bytes => bytes = 20
+    for (uint8_t i = 0; i < num; i++) {
+        data[i] = i;
+    }
+
+    int bytes = num*sizeof(float); // float is 4 bytes => bytes = 400
     // NOTE float and double both are 4 bytes (32 bits)
     // This is the only supported floating point format in AVR-GCC
 
-    printf("send f32*5 \n"); // send msg out
+    printf("send f32*100 \n"); // send msg out
     scanf("%s", s); // wait for sync
     M128_HMI_put(bytes, HMI_TYPE_F32, data); // send data
 

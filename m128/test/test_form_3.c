@@ -1,7 +1,7 @@
 /**
- * @file test_form_1.c
+ * @file test_form_3.c
  * @author mickey9910326
- * @date 2018.05.08
+ * @date 2018.05.14
  * @brief
  */
 
@@ -12,7 +12,7 @@
 typedef struct St {
     uint8_t ui8[10];
     int32_t i32[10];
-    float   f32[5];
+    float   f32[100];
 } st_t;
 
 int main() {
@@ -22,24 +22,27 @@ int main() {
     st_t data = {
         {1, 2, 3,  4,  5,  6,   7,   8,   9,   10},
         {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024},
-        {1.0, 2.5, 4.0, 5.5, 6.0}
+        {}
     };
+    for (uint8_t i = 0; i < 100; i++) {
+        data.f32[i] = i;
+    }
     int bytes = sizeof(st_t);
 
     printf("put struct\n");
     scanf("%s", s);
-    M128_HMI_Form_put("ui8x10,i32x10,f32x5", bytes, &data);
+    M128_HMI_Form_put("ui8x10,i32x10,f32x100", bytes, &data);
 
     printf("get struct\n");
     scanf("%s", s);
-    M128_HMI_Form_get("ui8x10,i32x10,f32x5", bytes, &data);
+    M128_HMI_Form_get("ui8x10,i32x10,f32x100", bytes, &data);
     data.ui8[0] += 1;
     data.i32[0] += 1;
     data.f32[0] += 1.0;
 
     printf("get struct\n");
     scanf("%s", s);
-    M128_HMI_Form_put("ui8x10,i32x10,f32x5", bytes, &data);
+    M128_HMI_Form_put("ui8x10,i32x10,f32x100", bytes, &data);
 
     return 0;
 }
