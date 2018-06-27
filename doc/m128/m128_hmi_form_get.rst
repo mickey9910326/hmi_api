@@ -65,4 +65,4 @@ Type資料型態代碼對應表
 
     struct Ball ball1;
 
-    M128_HMI_Form_get(“i8x10,f32x1”, &ball1); //10筆char,1筆float
+    M128_HMI_Form_get("i8x10,f32x1", &ball1); //10筆char,1筆float

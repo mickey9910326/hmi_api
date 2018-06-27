@@ -7,10 +7,11 @@ Welcome to hmi_api's documentation!
 ===================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Contents:
 
-   m128/index
+   m128/index.rst
+   matlab/index.rst
 
 
 Indices and tables
