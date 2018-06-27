@@ -10,7 +10,7 @@ Welcome to hmi_api's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   m128
+   m128/index
 
 
 Indices and tables
