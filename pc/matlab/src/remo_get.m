@@ -56,6 +56,7 @@ BytesH = fread(port, 1,'uint8');
 BytesL = fread(port, 1,'uint8');
 Bytes  = BytesH*256 + BytesL;
 CheckSum = BytesH + BytesL;
+Cdata = uint8(zeros(1,Bytes));
 
 % get binary data in uint8 form ASA_PC
 for i = 1:Bytes
@@ -68,7 +69,7 @@ CheckSum = rem(CheckSum,256);
 GetCheckSum = fread(port, 1,'uint8');
 
 % trans binary data to type
-data = typecast(0, type);
+data = typecast(uint8(zeros(1,Bytes)), type);
 for i = 1 : Bytes/TypeSize
     data(i) = typecast(uint8(Cdata( (i-1)*TypeSize +1: (i)*TypeSize )), type);
 end
