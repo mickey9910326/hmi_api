@@ -3,8 +3,8 @@
 root = true
 
 [*.m]
-indent_style = space
-indent_size = 4
+indent_style = tab
+indent_size = 1
 charset = big5
 
 [*.c]
