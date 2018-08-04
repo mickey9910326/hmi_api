@@ -28,9 +28,16 @@ struct Decoder::Impl {
 
     std::vector<char> text;
     std::vector<char> dataBuffer;
+    std::vector<char> extraDataBuffer;
+    uint8_t  chksum;
+    uint16_t bytes;
+    uint8_t  seq;
+    uint8_t  info;
+    uint8_t  is_continous;
     uint32_t used_length;
     enum Pactype pactype;   ///< which the packet is
     enum Stat status;
+    uint8_t  count;
 
     uint8_t get_ch(void);
     uint8_t step(void);
@@ -83,18 +90,77 @@ uint8_t Decoder::Impl::get_ch(void) {
 }
 
 uint8_t Decoder::Impl::step(void) {
+    // TODO ERROR CODE
     uint8_t ch = this->get_ch();
     switch (status) {
         case stat_header:
             if (ch==PAC_HEADER) {
                 status = stat_seq;
+                chksum = 0;
+                // NOTE trash is needed?
             }
+            break;
         case stat_seq:
+            chksum += ch;
+            if (seq&0x80) {
+                if ( (ch&0x1F) != (seq&0x1F)+1 ) {
+                    return 1;
+                } else {
+                    status = stat_info;
+                    seq    = ch;
+                }
+            } else {
+                status = stat_info;
+                seq    = ch;
+            }
+            break;
         case stat_info:
+            chksum += ch;
+            if ((ch&0x07) == 0) {
+                // Extra data bytes is 0
+                status = stat_byte;
+                info   = ch;
+                count  = 0;
+            } else {
+                status = stat_extdata;
+                info   = ch;
+                count  = 0;
+            }
+            break;
         case stat_extdata:
+            chksum += ch;
+            extraDataBuffer.push_back(ch);
+            count++;
+            if (count == (ch&0x07)) {
+                status = stat_byte;
+                count  = 0;
+            }
+            break;
         case stat_byte:
+            chksum += ch;
+            if (count == 0) {
+                bytes = ch<<8;
+                count++;
+            } else {
+                // count = 1
+                bytes += ch;
+                status = stat_data;
+                count  = 0;
+            }
+            break;
         case stat_data:
+            chksum += ch;
+            extraDataBuffer.push_back(ch);
+            count++;
+            if (count == bytes) {
+                status = stat_chksum;
+                count  = 0;
+            }
+            break;
         case stat_chksum:
+            if (ch!=chksum) {
+                return 1;
+            }
             break;
     }
     return 0;
