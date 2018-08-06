@@ -168,31 +168,37 @@ uint8_t Decoder::Impl::step(void) {
 
 // NOTE Packet defination
 
+// TODO 每個封包是否需要馬上回應
+// HACK NACK 對方解封包錯誤是否要回應 (不回)
+
 /*
 Packet layer
-Header    | 0xFD           | 1 bytes
+Header    | 0xFD           | 1 bytes (big5 沒有以0xFD起頭之編碼)
 Seq       | 0x??           | 1 bytes
 Info      | 0x??           | 1 bytes
-ExtraData | ??             | M bytes (Max is 8 bytes)
-Bytes     | 0x?? 0x??      | 2 bytes -> N
-HmiData   | ??             | N bytes
+ExtraData | ??             | M bytes (Max is 7 bytes)
+Bytes     | 0x?? 0x??      | 2 bytes = N (uint32_t)
+Data      | ??             | N bytes
 Chksum    | 0x??           | 1 bytes
 */
 
 /*
 Byte Seq
-num         | bit 0~4 | 代表當前續傳編號
+num         | bit 0~4 | 代表當前續傳編號 (MAX 32包)
 isContinous | bit 5   | 代表是否傳輸完畢
-isNeedRes   | bit 6   | 是否需要對方回應
-isRes       | bit 7   | 這封包是否為回應封包
+isNeedRes   | bit 6   | 是否需要對方回應 (?) (SYNC)
+isRes       | bit 7   | 這封包是否為回應封包 (ACK)
 */
 
 /*
 Byte Info
-ExtraInfobyte | bit 0~2 | 額外訊息長度 (max is 8)
-hasAddres     | bit 3   | 額外訊息是否包含地址
-isHmiData     | bit 7   | 是否為HMI資料封包
+ExtraInfobyte | bit 0~2 | 額外訊息長度 (max is 7)
+hasAddres     | bit 3   | 額外訊息是否包含地址 or Default Addres
+isRes         | bit 7   | 這封包是否為 ACK封包 (ACK)
+isRes         | bit 7   | 這封包是否為NACK封包 (ACK)
+
 */
+// (預設 ADDRES) ?
 
 /*
 HmiData Layer
@@ -200,4 +206,15 @@ Type   | 0x??      | 1 bytes
 Bytes  | 0x?? 0x?? | 2 bytes
 Data   | ??        | N bytes
 Chksum | 0x??      | 1 bytes
+*/
+
+/*
+Res Packet (6 bytes)
+Header    | 0xFD           | 1 bytes (big5 沒有以0xFD起頭之編碼)
+Seq       | 0b1000 0000    | 1 bytes
+Info      | 0b0000 1010    | 1 bytes
+ExtraData | 0x?? 0x??      | 2 bytes 代表位置
+Bytes     | X              | 0 bytes
+Data      | X              | 0 bytes
+Chksum    | 0x??           | 1 bytes
 */
